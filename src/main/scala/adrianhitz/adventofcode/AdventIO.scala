@@ -63,12 +63,12 @@ private object AdventIO {
   /**
    * Path to the directory containing the input files
    */
-  private val inputDirectory = ".\\src\\main\\resources\\aoc_input\\"
+  private val inputDirectory = "./src/main/resources/aoc_input/"
 
   /**
    * Path to the directory where the output files will be created
    */
-  private val outputDirectory = ".\\aoc_output\\"
+  private val outputDirectory = "./aoc_output/"
 
   /**
    * Writes the given content to the [[outputDirectory]], into a file with the given name. Creates the necessary
