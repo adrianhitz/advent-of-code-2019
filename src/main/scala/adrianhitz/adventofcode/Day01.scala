@@ -6,19 +6,34 @@ object Day01 extends AdventIO {
     write2(part2.toString)
   }
 
-  def part1(implicit s: String): Int = s.split('\n').map(x => x.toInt / 3 - 2).sum
+  // @formatter:off
+  def part1(implicit s:String):Int = s.split('\n').map(_.toInt/3-2).sum
+  // @formatter:on
 
   def part2(implicit s: String): Int = {
-    val masses = s.split('\n').map(_.toInt)
-    val f: Int => Int = x => x / 3 - 2
-    var totalFuel: Int = 0
-    for(mass <- masses) {
-      var fuel = f(mass)
-      while(fuel > 0) {
-        totalFuel += fuel
-        fuel = f(fuel)
-      }
+    def calculateFuel: Int => Int = mass => {
+      val fuel = mass / 3 - 2
+      if(fuel > 0) fuel + calculateFuel(fuel) else 0
     }
-    totalFuel
+    s.split('\n').map(mass => calculateFuel(mass.toInt)).sum
+  }
+
+  // 76 bytes
+  def part2golf(implicit s: String): Int = {
+    // @formatter:off
+    s.split('\n').map(x=>{var m=x.toInt
+    var f=0
+    while(m>9){m=m/3-2
+    f+=m}
+    f}).sum
+    // @formatter:on
+  }
+
+  // 82 bytes
+  def part2golf2(implicit s: String): Int = {
+    // @formatter:off
+    def g:Int=>Int=m=>if(m>9)m/3-2+g(m/3-2)else 0
+    s.split('\n').map(x=>g(x.toInt)).sum
+    // @formatter:off
   }
 }
