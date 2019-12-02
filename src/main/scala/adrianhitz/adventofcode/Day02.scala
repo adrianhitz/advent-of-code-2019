@@ -7,38 +7,38 @@ object Day02 extends AdventIO {
   }
 
   def part1(implicit s: String): Int = {
-    var c: Array[Int] = s.split(',').map(_.toInt)
-    c(1) = 12
-    c(2) = 2
+    val code: Array[Int] = s.split(',').map(_.toInt)
+    code(1) = 12
+    code(2) = 2
     var i = 0
-    while (c(i) != 99) {
-      c(i) match {
-        case 1 => c(c(i + 3)) = c(c(i + 2)) + c(c(i + 1))
-        case 2 => c(c(i + 3)) = c(c(i + 2)) * c(c(i + 1))
+    while (code(i) != 99) {
+      code(i) match {
+        case 1 => code(code(i + 3)) = code(code(i + 2)) + code(code(i + 1))
+        case 2 => code(code(i + 3)) = code(code(i + 2)) * code(code(i + 1))
       }
       i += 4
     }
-    c(0)
+    code(0)
   }
 
   def part2(implicit s: String): Int = {
-    val c: Array[Int] = s.split(',').map(_.toInt)
+    val code: Array[Int] = s.split(',').map(_.toInt)
     for (noun <- 0 to 99; verb <- 0 to 99) {
-      var m = c.clone()
-      m(1) = noun
-      m(2) = verb
+      val memory = code.clone()
+      memory(1) = noun
+      memory(2) = verb
       var i = 0
       var crashed = false
 
-      while (m(i) != 99 && !crashed) {
-        m(i) match {
-          case 1 => m(m(i + 3)) = m(m(i + 2)) + m(m(i + 1))
-          case 2 => m(m(i + 3)) = m(m(i + 2)) * m(m(i + 1))
+      while (memory(i) != 99 && !crashed) {
+        memory(i) match {
+          case 1 => memory(memory(i + 3)) = memory(memory(i + 2)) + memory(memory(i + 1))
+          case 2 => memory(memory(i + 3)) = memory(memory(i + 2)) * memory(memory(i + 1))
           case _ => crashed = true
         }
         i += 4
       }
-      if (m(0) == 19690720) return 100 * noun + verb
+      if (!crashed && memory(0) == 19690720) return 100 * noun + verb
     }
     throw new Exception("No solution found")
   }
