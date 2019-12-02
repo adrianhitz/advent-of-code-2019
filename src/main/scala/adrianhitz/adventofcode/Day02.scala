@@ -17,9 +17,10 @@ object Day02 extends AdventIO {
     code(2) = 2
     var i = 0
     while (code(i) != 99) {
+      val (p1, p2, out) = (code(i + 1), code(i + 2), code(i + 3))
       code(i) match {
-        case 1 => code(code(i + 3)) = code(code(i + 2)) + code(code(i + 1))
-        case 2 => code(code(i + 3)) = code(code(i + 2)) * code(code(i + 1))
+        case 1 => code(out) = code(p1) + code(p2)
+        case 2 => code(out) = code(p1) * code(p2)
       }
       i += 4
     }
@@ -36,9 +37,10 @@ object Day02 extends AdventIO {
       var crashed = false
 
       while (memory(i) != 99 && !crashed) {
+        val (p1, p2, out) = (code(i + 1), code(i + 2), code(i + 3))
         memory(i) match {
-          case 1 => memory(memory(i + 3)) = memory(memory(i + 2)) + memory(memory(i + 1))
-          case 2 => memory(memory(i + 3)) = memory(memory(i + 2)) * memory(memory(i + 1))
+          case 1 => memory(out) = memory(p1) + memory(p2)
+          case 2 => memory(out) = memory(p1) * memory(p2)
           case _ => crashed = true
         }
         i += 4
