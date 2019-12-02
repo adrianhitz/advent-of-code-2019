@@ -3,7 +3,12 @@ package adrianhitz.adventofcode
 object Day02 extends AdventIO {
   override def main(args: Array[String]): Unit = {
     write1(part1.toString)
-    write2(part2.toString)
+    write2 {
+      part2 match {
+        case None => "No solution found"
+        case Some(n) => n.toString
+      }
+    }
   }
 
   def part1(implicit s: String): Int = {
@@ -21,7 +26,7 @@ object Day02 extends AdventIO {
     code(0)
   }
 
-  def part2(implicit s: String): Int = {
+  def part2(implicit s: String): Option[Int] = {
     val code: Array[Int] = s.split(',').map(_.toInt)
     for (noun <- 0 to 99; verb <- 0 to 99) {
       val memory = code.clone()
@@ -38,8 +43,8 @@ object Day02 extends AdventIO {
         }
         i += 4
       }
-      if (!crashed && memory(0) == 19690720) return 100 * noun + verb
+      if (!crashed && memory(0) == 19690720) return Some(100 * noun + verb)
     }
-    throw new Exception("No solution found")
+    None
   }
 }
