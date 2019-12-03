@@ -44,7 +44,31 @@ object Day03 extends AdventIO {
     intersections.map(point => point.manhattan(centralPort)).min
   }
 
-  def part2(implicit s: String): Int = ???
+  def part2(implicit s: String): Int = {
+    val wires: Array[Array[(String, Int)]] = s.split('\n').map(_.split(',')).map(_.map(x => {
+      val direction = x.substring(0, 1)
+      val length = x.substring(1).toInt
+      (direction, length)
+    }))
+
+    val centralPort = Point(0, 0)
+
+    val pointSets = List(mutable.Map[Point, Int](), mutable.Map[Point, Int]())
+    for ((wire, points) <- wires.zip(pointSets)) {
+      var position = centralPort
+      var steps = 0
+      for ((direction, length) <- wire) {
+        for (i <- Range(0, length)) {
+          points += (position.add(direction, i) -> steps)
+          steps += 1
+        }
+        position = position.add(direction, length)
+      }
+      points -= centralPort
+    }
+    val intersections = pointSets(0).keySet.intersect(pointSets(1).keySet).toList
+    intersections.map(point => pointSets(0)(point) + pointSets(1)(point)).min
+  }
 
   private object Direction extends Enumeration {
     type Direction = Value
