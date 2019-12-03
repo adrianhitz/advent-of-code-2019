@@ -15,10 +15,10 @@ object Day03 extends AdventIO {
     val centralPort = Point(0, 0)
 
     val pointSets = List(mutable.Set[Point](), mutable.Set[Point]())
-    for ((wire, points) <- wires.zip(pointSets)) {
+    for((wire, points) <- wires.zip(pointSets)) {
       var position = centralPort
-      for ((direction, length) <- wire) {
-        for (i <- Range(0, length)) {
+      for((direction, length) <- wire) {
+        for(i <- Range(0, length)) {
           points += position.add(direction, i)
         }
         position = position.add(direction, length)
@@ -35,11 +35,11 @@ object Day03 extends AdventIO {
     val centralPort = Point(0, 0)
 
     val pointSets = List(mutable.Map[Point, Int](), mutable.Map[Point, Int]())
-    for ((wire, points) <- wires.zip(pointSets)) {
+    for((wire, points) <- wires.zip(pointSets)) {
       var position = centralPort
       var steps = 0
-      for ((direction, length) <- wire) {
-        for (i <- Range(0, length)) {
+      for((direction, length) <- wire) {
+        for(i <- Range(0, length)) {
           points += (position.add(direction, i) -> steps)
           steps += 1
         }
