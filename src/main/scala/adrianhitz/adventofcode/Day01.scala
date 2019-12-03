@@ -7,7 +7,7 @@ object Day01 extends AdventIO {
   }
 
   // @formatter:off
-  def part1(implicit s:String):Int = s.split('\n').map(_.toInt/3-2).sum
+  def part1(implicit s:String): Int = s.split('\n').map(_.toInt/3-2).sum
   // @formatter:on
 
   def part2(implicit s: String): Int = {
