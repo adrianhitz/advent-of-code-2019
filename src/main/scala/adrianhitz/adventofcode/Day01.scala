@@ -15,6 +15,7 @@ object Day01 extends AdventIO {
       val fuel = mass / 3 - 2
       if(fuel > 0) fuel + calculateFuel(fuel) else 0
     }
+
     s.split('\n').map(mass => calculateFuel(mass.toInt)).sum
   }
 
