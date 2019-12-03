@@ -9,23 +9,8 @@ object Day03 extends AdventIO {
     write2(part2.toString)
   }
 
-  private case class Point(x: Int, y: Int) {
-    def add(direction: String, length: Int): Point = direction match {
-      case "R" => Point(x + length, y)
-      case "L" => Point(x - length, y)
-      case "U" => Point(x, y + length)
-      case "D" => Point(x, y - length)
-    }
-
-    def manhattan(other: Point): Int = Math.abs(x - other.x) + Math.abs(y - other.y)
-  }
-
   def part1(implicit s: String): Int = {
-    val wires: Array[Array[(String, Int)]] = s.split('\n').map(_.split(',')).map(_.map(x => {
-      val direction = x.substring(0, 1)
-      val length = x.substring(1).toInt
-      (direction, length)
-    }))
+    val wires: Array[Array[(String, Int)]] = parseInput(s)
 
     val centralPort = Point(0, 0)
 
@@ -45,11 +30,7 @@ object Day03 extends AdventIO {
   }
 
   def part2(implicit s: String): Int = {
-    val wires: Array[Array[(String, Int)]] = s.split('\n').map(_.split(',')).map(_.map(x => {
-      val direction = x.substring(0, 1)
-      val length = x.substring(1).toInt
-      (direction, length)
-    }))
+    val wires: Array[Array[(String, Int)]] = parseInput(s)
 
     val centralPort = Point(0, 0)
 
@@ -70,9 +51,23 @@ object Day03 extends AdventIO {
     intersections.map(point => pointSets(0)(point) + pointSets(1)(point)).min
   }
 
-  private object Direction extends Enumeration {
-    type Direction = Value
-    val Left, Right, Up, Down = Value
+  private def parseInput(s: String): Array[Array[(String, Int)]] = {
+    s.split('\n').map(_.split(',')).map(_.map(x => {
+      val direction = x.substring(0, 1)
+      val length = x.substring(1).toInt
+      (direction, length)
+    }))
+  }
+
+  private case class Point(x: Int, y: Int) {
+    def add(direction: String, length: Int): Point = direction match {
+      case "R" => Point(x + length, y)
+      case "L" => Point(x - length, y)
+      case "U" => Point(x, y + length)
+      case "D" => Point(x, y - length)
+    }
+
+    def manhattan(other: Point): Int = Math.abs(x - other.x) + Math.abs(y - other.y)
   }
 
 }
