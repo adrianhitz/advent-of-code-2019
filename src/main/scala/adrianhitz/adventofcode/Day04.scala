@@ -22,10 +22,10 @@ object Day04 extends AdventIO {
     digits.zipWithIndex.forall(x => x._2 + 1 >= digits.length || x._1 <= digits(x._2 + 1))
 
   def atLeastTwo(digits: List[Int]): Boolean =
-    digits.foldLeft(false)((b: Boolean, d: Int) => b || digits.count(_ == d) >= 2)
+    digits.foldLeft(false)((b, d) => b || digits.count(_ == d) >= 2)
 
   def exactlyTwo(digits: List[Int]): Boolean =
-    digits.foldLeft(false)((b: Boolean, d: Int) => b || digits.count(_ == d) == 2)
+    digits.foldLeft(false)((b, d) => b || digits.count(_ == d) == 2)
 
   // 202 bytes
   def part1golf(implicit s: String): Int = {
