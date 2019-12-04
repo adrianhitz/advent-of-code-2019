@@ -15,18 +15,10 @@ object Day04 extends AdventIO {
     val in = s.split('-').map(_.toInt)
     Range(in(0), in(1)).count(n => valid2(splitDigits(n)))
   }
+  
+  def splitDigits(n: Int): List[Int] = n.toString.toList.map(_.toInt)
 
-  def splitDigits(n: Int): Array[Int] = {
-    val s = n.toString
-    val d = s.length
-    val digits = new Array[Int](d)
-    for(i <- Range(0, d)) {
-      digits(d - 1 - i) = (n % Math.pow(10, i + 1).toInt) / Math.pow(10, i).toInt
-    }
-    digits
-  }
-
-  def valid1(digits: Array[Int]): Boolean = {
+  def valid1(digits: List[Int]): Boolean = {
     var increasing = true
     var neighbours = false
     for(i <- Range(0, digits.length - 1)) {
@@ -36,7 +28,7 @@ object Day04 extends AdventIO {
     increasing && neighbours
   }
 
-  def valid2(digits: Array[Int]): Boolean = {
+  def valid2(digits: List[Int]): Boolean = {
     var increasing = true
     var neighbours = false
     for(i <- Range(0, digits.length - 1)) {
