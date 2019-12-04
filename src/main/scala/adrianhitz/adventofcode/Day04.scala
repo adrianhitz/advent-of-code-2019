@@ -8,33 +8,41 @@ object Day04 extends AdventIO {
 
   def part1(implicit s: String): Int = {
     val in = s.split('-').map(_.toInt)
-    Range(in(0), in(1)).count(n => valid1(splitDigits(n)))
+    Range(in(0), in(1)).map(splitDigits).count(n => increasing(n) && atLeastTwo(n))
   }
 
   def part2(implicit s: String): Int = {
     val in = s.split('-').map(_.toInt)
-    Range(in(0), in(1)).count(n => valid2(splitDigits(n)))
+    Range(in(0), in(1)).map(splitDigits) count(n => increasing(n) && exactlyTwo(n))
   }
-  
+
   def splitDigits(n: Int): List[Int] = n.toString.toList.map(_.toInt)
 
-  def valid1(digits: List[Int]): Boolean = {
-    var increasing = true
-    var neighbours = false
-    for(i <- Range(0, digits.length - 1)) {
-      if(digits(i) > digits(i + 1)) increasing = false
-      if(digits(i) == digits(i + 1)) neighbours = true
-    }
-    increasing && neighbours
+  def increasing(digits: List[Int]): Boolean =
+    digits.zipWithIndex.forall(x => x._2 + 1 >= digits.length || x._1 <= digits(x._2 + 1))
+
+  def atLeastTwo(digits: List[Int]): Boolean =
+    digits.foldLeft(false)((b: Boolean, d: Int) => b || digits.count(_ == d) >= 2)
+
+  def exactlyTwo(digits: List[Int]): Boolean =
+    digits.foldLeft(false)((b: Boolean, d: Int) => b || digits.count(_ == d) == 2)
+
+  // 202 bytes
+  def part1golf(implicit s: String): Int = {
+    // @formatter:off
+    val a=s.split('-').map(_.toInt)
+    Range(a(0),a(1)).map(_.toString.toList.map(_.toInt))
+    .count(n=>n.zipWithIndex.forall(x=>x._2+1>=n.length||x._1<=n(x._2+1))&&n.foldLeft(false)((b,d)=>b||n.count(_==d)>=2))
+    // @formatter:on
   }
 
-  def valid2(digits: List[Int]): Boolean = {
-    var increasing = true
-    var neighbours = false
-    for(i <- Range(0, digits.length - 1)) {
-      if(digits(i) > digits(i + 1)) increasing = false
-      if(digits.count(x => x == digits(i)) == 2) neighbours = true
-    }
-    increasing && neighbours
+  // 202 bytes
+  def part2golf(implicit s: String): Int = {
+    // @formatter:off
+    val a=s.split('-').map(_.toInt)
+    Range(a(0),a(1)).map(_.toString.toList.map(_.toInt))
+    .count(n=>n.zipWithIndex.forall(x=>x._2+1>=n.length||x._1<=n(x._2+1))&&n.foldLeft(false)((b,d)=>b||n.count(_==d)==2))
+    // @formatter:on
   }
 }
+
