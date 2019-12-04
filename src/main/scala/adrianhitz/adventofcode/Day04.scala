@@ -16,7 +16,6 @@ object Day04 extends AdventIO {
       }
       var increasing = true
       var neighbours = false
-
       for(i <- Range(0, 6 - 1)) {
         if(digits(i) > digits(i + 1)) increasing = false
         if(digits(i) == digits(i + 1)) neighbours = true
@@ -36,15 +35,10 @@ object Day04 extends AdventIO {
       }
       var increasing = true
       var neighbours = false
-
       for(i <- Range(0, 6 - 1)) {
         if(digits(i) > digits(i + 1)) increasing = false
-        if(digits(i) == digits(i + 1)) {
-          if(digits.count(x => x == digits(i)) <= 2)
-            neighbours = true
-        }
+        if(digits.count(x => x == digits(i)) == 2) neighbours = true
       }
-
       if(increasing && neighbours) i += 1
     }
     i
