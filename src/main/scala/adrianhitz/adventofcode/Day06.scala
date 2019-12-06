@@ -2,32 +2,20 @@ package adrianhitz.adventofcode
 
 import scala.collection.mutable
 
+//noinspection ZeroIndexToHead
 object Day06 extends AdventIO {
   override def main(args: Array[String]): Unit = {
     write1(part1.toString)
     write2(part2.toString)
   }
 
-  def part1(implicit s: String): Int = {
-    val in = s.split('\n').map(_.split(')')).map(x => (x(0), x(1))).toSet
-    val com = Body("COM", None)
-    val bodies = mutable.Set[Body]()
-    add(com, bodies, in)
-    bodies.toList.map(_.parents).map(_.size).sum
-
-  }
+  def part1(implicit s: String): Int = createTree(s).toList.map(_.parents).map(_.size).sum
 
   def part2(implicit s: String): Int = {
-    val in = s.split('\n').map(_.split(')')).map(x => (x.head, x(1))).toSet
-    val com = Body("COM", None)
-    val bodies = mutable.Set[Body]()
-    add(com, bodies, in)
-
-    val myParents = bodies.filter(x => x.name == "YOU").head.parents
-    val santaParents = bodies.filter(x => x.name == "SAN").head.parents
-    val intersection: Seq[Body] = myParents.intersect(santaParents)
-
-    myParents.diff(intersection).size + santaParents.diff(intersection).size
+    val bodies: mutable.Set[Body] = createTree(s)
+    val parents: List[List[Body]] = bodies.filter(x => x.name == "YOU" || x.name == "SAN").toList.map(_.parents)
+    val intersection = parents(0).intersect(parents(1))
+    parents(0).diff(intersection).size + parents(1).diff(intersection).size
   }
 
   case class Body(name: String, parent: Option[Body]) {
@@ -35,6 +23,14 @@ object Day06 extends AdventIO {
       case Some(body) => body :: body.parents
       case None => Nil
     }
+  }
+
+  def createTree(s: String): mutable.Set[Body] = {
+    val bodyPairs = s.split('\n').map(_.split(')')).map(x => (x(0), x(1))).toSet
+    val com = Body("COM", None)
+    val bodies = mutable.Set[Body]()
+    add(com, bodies, bodyPairs)
+    bodies
   }
 
   private def add(body: Body, added: mutable.Set[Body], remaining: Set[(String, String)]): Unit = {
