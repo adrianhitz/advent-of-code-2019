@@ -9,86 +9,37 @@ object Day06 extends AdventIO {
   }
 
   def part1(implicit s: String): Int = {
-    var l = s.split('\n').map(_.split(')')).map(x => (x.head, x(1))).toList
+    val in = s.split('\n').map(_.split(')')).map(x => (x(0), x(1))).toSet
     val com = Body("COM", None)
-    val bs = mutable.Set[Body]()
+    val bodies = mutable.Set[Body]()
+    add(com, bodies, in)
+    bodies.toList.map(_.parents).map(_.size).sum
 
-    def add(b: Body): Unit = {
-      bs += b
-      val toAdd: Seq[Body] = l.filter(x => x._1 == b.name).map(x => Body(x._2, Some(b)))
-      if(toAdd.nonEmpty) {
-        l = l.filter(x => x._1 != b.name)
-        b.moons.addAll(toAdd)
-        for(moon <- toAdd) {
-          add(moon)
-        }
-      }
-    }
-
-    add(com)
-
-    var totalOrbits = 0
-    for(b <- bs) {
-      var current = b
-      var orbits = true
-      while(orbits) {
-        current.orbits match {
-          case Some(body) => {
-            current = body
-            totalOrbits += 1
-          }
-          case None => orbits = false
-        }
-      }
-    }
-    totalOrbits
   }
 
   def part2(implicit s: String): Int = {
-    var l = s.split('\n').map(_.split(')')).map(x => (x.head, x(1))).toList
+    val in = s.split('\n').map(_.split(')')).map(x => (x.head, x(1))).toSet
     val com = Body("COM", None)
-    val bs = mutable.Set[Body]()
+    val bodies = mutable.Set[Body]()
+    add(com, bodies, in)
 
-    def add(b: Body): Unit = {
-      bs += b
-      val toAdd: Seq[Body] = l.filter(x => x._1 == b.name).map(x => Body(x._2, Some(b)))
-      if(toAdd.nonEmpty) {
-        l = l.filter(x => x._1 != b.name)
-        b.moons.addAll(toAdd)
-        for(moon <- toAdd) {
-          add(moon)
-        }
-      }
-    }
+    val myParents = bodies.filter(x => x.name == "YOU").head.parents
+    val santaParents = bodies.filter(x => x.name == "SAN").head.parents
+    val intersection: Seq[Body] = myParents.intersect(santaParents)
 
-    add(com)
-
-
-    val me = bs.filter(x => x.name == "YOU").head
-    val santa = bs.filter(x => x.name == "SAN").head
-    val us = List(me, santa)
-    val ourOrbits = List(mutable.Set(me), mutable.Set(santa))
-
-    for((person, i) <- us.zipWithIndex) {
-      var current = person
-      var orbits = true
-      while(orbits) {
-        current.orbits match {
-          case Some(body) =>
-            ourOrbits(i) += body
-            current = body
-          case None => orbits = false
-        }
-      }
-    }
-
-    val intersection = ourOrbits(0).intersect(ourOrbits(1))
-
-    ourOrbits.map(_.diff(intersection).size).sum - 2
+    myParents.diff(intersection).size + santaParents.diff(intersection).size
   }
 
-  case class Body(name: String, orbits: Option[Body]) {
-    var moons: mutable.Set[Body] = mutable.Set[Body]()
+  case class Body(name: String, parent: Option[Body]) {
+    def parents: List[Body] = parent match {
+      case Some(body) => body :: body.parents
+      case None => Nil
+    }
   }
 
+  private def add(body: Body, added: mutable.Set[Body], remaining: Set[(String, String)]): Unit = {
+    added += body
+    val moons: Set[Body] = remaining.filter(x => x._1 == body.name).map(x => Body(x._2, Some(body)))
+    moons.foreach(add(_, added, remaining))
+  }
 }
