@@ -9,12 +9,15 @@ object Day06 extends AdventIO {
     write2(part2.toString)
   }
 
-  def part1(implicit s: String): Int = createTree(s).toList.map(_.parents).map(_.size).sum
+  def part1(implicit s: String): Int = {
+    val bodies: mutable.Set[Body] = createTree(s)
+    bodies.toList.map(_.parents).map(_.size).sum
+  }
 
   def part2(implicit s: String): Int = {
     val bodies: mutable.Set[Body] = createTree(s)
     val parents: List[List[Body]] = bodies.filter(x => x.name == "YOU" || x.name == "SAN").toList.map(_.parents)
-    val intersection = parents(0).intersect(parents(1))
+    val intersection: Seq[Body] = parents(0).intersect(parents(1))
     parents(0).diff(intersection).size + parents(1).diff(intersection).size
   }
 
