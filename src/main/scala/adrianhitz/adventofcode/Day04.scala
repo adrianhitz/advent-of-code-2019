@@ -13,7 +13,7 @@ object Day04 extends AdventIO {
 
   def part2(implicit s: String): Int = {
     val in = s.split('-').map(_.toInt)
-    Range(in(0), in(1)).map(splitDigits) count(n => increasing(n) && exactlyTwo(n))
+    Range(in(0), in(1)).map(splitDigits).count(n => increasing(n) && exactlyTwo(n))
   }
 
   def splitDigits(n: Int): List[Int] = n.toString.toList.map(_.toInt)
