@@ -59,6 +59,7 @@ object Day05 extends AdventIO {
         val op: Operation = operations.get(opcode) match {
           case Some(v) => v
           case None =>
+            halt()
             return Right(s"Unknown opcode $opcode")
         }
 
@@ -70,6 +71,7 @@ object Day05 extends AdventIO {
 
         op.function(params)
       }
+      halt()
       Left(output)
     }
 
@@ -77,6 +79,8 @@ object Day05 extends AdventIO {
       memory = ListBuffer(program: _*)
       pc = 0
     }
+
+    protected def halt(): Unit = running = false
 
     protected def popInput(): Int = {
       val h = input.head
@@ -121,9 +125,7 @@ object Day05 extends AdventIO {
         memory(p(2)) = if (memory(p(0)) == memory(p(1))) 1 else 0
         pc += 3
       }),
-      99 -> Operation(0, _ => {
-        running = false
-      })
+      99 -> Operation(0, _ => halt())
     )
   }
 
