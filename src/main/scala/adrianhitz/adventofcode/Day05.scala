@@ -51,7 +51,7 @@ object Day05 extends AdventIO {
       reset()
       running = true
       input = in
-      while (running && pc >= 0 && pc < memory.length) {
+      while(running && pc >= 0 && pc < memory.length) {
         val (opcode, paramModes) = parseInstruction(memory(pc))
         pc += 1
         val op: Operation = operations.get(opcode) match {
@@ -64,7 +64,7 @@ object Day05 extends AdventIO {
         val paramCount = op.parameterCount
         val params = memory.zipWithIndex.slice(pc, pc + paramCount).zip(paramModes).map(x => {
           val ((value, index), mode) = x
-          if (mode == 0) value else index
+          if(mode == 0) value else index
         }).toVector
 
         op.function(params)
@@ -116,17 +116,17 @@ object Day05 extends AdventIO {
         pc += 1
       }),
       5 -> Operation(2, p => {
-        if (memory(p(0)) != 0) pc = memory(p(1)) else pc += 2
+        if(memory(p(0)) != 0) pc = memory(p(1)) else pc += 2
       }),
       6 -> Operation(2, p => {
-        if (memory(p(0)) == 0) pc = memory(p(1)) else pc += 2
+        if(memory(p(0)) == 0) pc = memory(p(1)) else pc += 2
       }),
       7 -> Operation(3, p => {
-        memory(p(2)) = if (memory(p(0)) < memory(p(1))) 1 else 0
+        memory(p(2)) = if(memory(p(0)) < memory(p(1))) 1 else 0
         pc += 3
       }),
       8 -> Operation(3, p => {
-        memory(p(2)) = if (memory(p(0)) == memory(p(1))) 1 else 0
+        memory(p(2)) = if(memory(p(0)) == memory(p(1))) 1 else 0
         pc += 3
       }),
       99 -> Operation(0, _ => halt())
