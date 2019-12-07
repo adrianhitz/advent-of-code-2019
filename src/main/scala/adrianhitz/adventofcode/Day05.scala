@@ -9,8 +9,7 @@ object Day05 extends AdventIO {
   }
 
   def part1(implicit s: String): Int = {
-    val program: Vector[Int] = s.split(',').map(_.toInt).toVector
-    val c = new Day05Computer(program)
+    val c = new Day05Computer(s)
     c.run(Vector(1)) match {
       case Left(_ :+ v) => v
       case Right(error) => println(error); -1
@@ -18,8 +17,7 @@ object Day05 extends AdventIO {
   }
 
   def part2(implicit s: String): Int = {
-    val program: Vector[Int] = s.split(',').map(_.toInt).toVector
-    val computer = new Day05Computer(program)
+    val computer = new Day05Computer(s)
     computer.run(Vector(5)) match {
       case Left(_ :+ v) => v
       case Right(error) => println(error); -1
@@ -93,7 +91,13 @@ object Day05 extends AdventIO {
     def getOutput: Vector[Int] = output
   }
 
+  object Computer {
+    def parseProgram(s: String): Vector[Int] = s.split(',').map(_.toInt).toVector
+  }
+
   class Day05Computer(program: Vector[Int]) extends Computer(program) {
+    def this(s: String) = this(Computer.parseProgram(s))
+
     override protected val operations: Map[Int, Operation] = Map(
       1 -> Operation(3, p => {
         memory(p(2)) = memory(p(0)) + memory(p(1))
