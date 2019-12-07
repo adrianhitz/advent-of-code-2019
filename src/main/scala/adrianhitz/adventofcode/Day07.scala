@@ -1,5 +1,7 @@
 package adrianhitz.adventofcode
 
+import adrianhitz.adventofcode.Day05.Day05Computer
+
 //noinspection ZeroIndexToHead
 object Day07 extends AdventIO {
   override def main(args: Array[String]): Unit = {
@@ -7,7 +9,23 @@ object Day07 extends AdventIO {
     write2(part2.toString)
   }
 
-  def part1(implicit s: String): Int = ???
+  def part1(implicit s: String): Int = {
+    var max = Integer.MIN_VALUE
+    for(permutation <- (0 to 4).permutations) {
+      var signal = 0
+      for(phase <- permutation) {
+        val input = Vector(phase, signal)
+        val computer = new Day05Computer(s)
+        val output = computer.run(input)
+        output match {
+          case Left(_ :+ v) => signal = v
+          case _ => println("Something went wrong.")
+        }
+      }
+      max = Math.max(max, signal)
+    }
+    max
+  }
 
   def part2(implicit s: String): Int = ???
 }
