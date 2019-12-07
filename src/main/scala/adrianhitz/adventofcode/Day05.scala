@@ -9,8 +9,8 @@ object Day05 extends AdventIO {
   }
 
   def part1(implicit s: String): Int = {
-    val c = new Day05Computer(s)
-    c.run(Vector(1)) match {
+    val computer = new Day05Computer(s)
+    computer.run(Vector(1)) match {
       case Left(_ :+ v) => v
       case Right(error) => println(error); -1
     }
