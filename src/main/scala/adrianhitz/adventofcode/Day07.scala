@@ -16,11 +16,8 @@ object Day07 extends AdventIO {
       for(phase <- permutation) {
         val input = Vector(phase, signal)
         val computer = new Day05Computer(s)
-        val output = computer.run(input)
-        output match {
-          case Left(_ :+ v) => signal = v
-          case _ => println("Something went wrong.")
-        }
+        computer.run(input)
+        signal = computer.getOutput.last
       }
       max = Math.max(max, signal)
     }
