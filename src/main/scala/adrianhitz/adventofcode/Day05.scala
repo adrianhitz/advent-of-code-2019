@@ -1,6 +1,6 @@
 package adrianhitz.adventofcode
 
-import adrianhitz.adventofcode.computer.Computer
+import adrianhitz.adventofcode.computer._
 
 object Day05 extends AdventIO {
   override def main(args: Array[String]): Unit = {

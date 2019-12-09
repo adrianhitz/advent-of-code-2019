@@ -2,7 +2,7 @@ package adrianhitz.adventofcode.computer
 
 import scala.collection.mutable.ListBuffer
 
-abstract class Computer(val program: Vector[Int]) {
+private[adventofcode] abstract class Computer(val program: Vector[Int]) {
   protected var memory: ListBuffer[Int] = ListBuffer(program: _*)
   protected var pc: Int = 0
   protected var state: State.Value = State.Initialised
@@ -25,14 +25,6 @@ abstract class Computer(val program: Vector[Int]) {
   }
 
   protected def writeToOutput(out: Int): Unit = output = output :+ out
-
-  protected case class Operation(parameterCount: Int, function: Vector[Int] => Unit) {
-    def run(parameters: Vector[Int]): Unit = function(parameters)
-  }
-
-  object State extends Enumeration {
-    val Initialised, Running, Terminated, Crashed, WaitingForInput = Value
-  }
 
   private def parseInstruction(instr: Int): (Int, Vector[Int]) = {
     var s = instr.toString
@@ -76,6 +68,6 @@ abstract class Computer(val program: Vector[Int]) {
   }
 }
 
-object Computer {
+private[adventofcode] object Computer {
   def parseProgram(s: String): Vector[Int] = s.split(',').map(_.toInt).toVector
 }
