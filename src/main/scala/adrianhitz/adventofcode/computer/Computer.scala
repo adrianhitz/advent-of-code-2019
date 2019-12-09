@@ -26,22 +26,12 @@ private[adventofcode] abstract class Computer(val program: Vector[Int]) {
 
   protected def writeToOutput(out: Int): Unit = output = output :+ out
 
-  private def parseInstruction(instr: Int): (Int, Vector[Int]) = {
-    var s = instr.toString
-    s = "0" * (5 - s.length) + s
-
-    val opcode = s.substring(3).toInt
-    val paramModes = s.substring(0, 3).toVector.map(_.toString.toInt).reverse
-
-    (opcode, paramModes)
-  }
-
   def run(in: Vector[Int]): Unit = {
     reset()
     state = State.Running
     input = in
     while(state == State.Running && pc >= 0 && pc < memory.length) {
-      val (opcode, paramModes) = parseInstruction(memory(pc))
+      val (opcode, paramModes) = Computer.parseInstruction(memory(pc))
       pc += 1
       val op: Operation = operations.get(opcode) match {
         case Some(v) => v
@@ -70,4 +60,14 @@ private[adventofcode] abstract class Computer(val program: Vector[Int]) {
 
 private[adventofcode] object Computer {
   def parseProgram(s: String): Vector[Int] = s.split(',').map(_.toInt).toVector
+
+  private def parseInstruction(instr: Int): (Int, Vector[Int]) = {
+    var s = instr.toString
+    s = "0" * (5 - s.length) + s
+
+    val opcode = s.substring(3).toInt
+    val paramModes = s.substring(0, 3).toVector.map(_.toString.toInt).reverse
+
+    (opcode, paramModes)
+  }
 }
