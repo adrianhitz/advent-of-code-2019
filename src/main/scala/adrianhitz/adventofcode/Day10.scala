@@ -3,10 +3,35 @@ package adrianhitz.adventofcode
 object Day10 extends AdventIO {
   override def main(args: Array[String]): Unit = {
     write1(part1.toString)
+    println(s"The best position for the monitoring station is at $stationPosition")
     // write2(part2.toString)
   }
 
   def part1(implicit s: String): Int = {
+    val asteroidPositions: Set[(Int, Int)] = parseInput(s)
+    val station = asteroidPositions
+        .map(asteroid => (asteroid, (asteroidPositions - asteroid).map(x => reduce(subtract(x, asteroid))).size))
+        .maxBy(_._2)
+    stationPosition = station._1
+    station._2
+  }
+
+  def part2(implicit s: String): Int = {
+    case class Asteroid(position: (Int, Int), reduced: (Int, Int), angle: Double)
+    val asteroids: Set[(Int, Int)] = parseInput(s)
+
+    ???
+  }
+
+  var stationPosition: (Int, Int) = (0, 0)
+
+  private def parseInput(s: String): Set[(Int, Int)] =
+    s.split('\n').zipWithIndex.flatMap(
+      row => row._1.zipWithIndex.filter(elem => elem._1 == '#').map(elem => (elem._2, row._2))
+    ).toSet
+
+  @deprecated
+  private def parseInputOld(s: String): Set[(Int, Int)] = {
     val rows = s.split('\n')
     var asteroids = Set[(Int, Int)]()
     for((row, y) <- rows.zipWithIndex) {
@@ -16,10 +41,8 @@ object Day10 extends AdventIO {
         }
       }
     }
-    asteroids.map(asteroid => (asteroids - asteroid).map(x => reduce(subtract(x, asteroid))).size).max
+    asteroids
   }
-
-  def part2(implicit s: String): Int = ???
 
   @scala.annotation.tailrec
   private def gcd(a: Int, b: Int): Int = {
