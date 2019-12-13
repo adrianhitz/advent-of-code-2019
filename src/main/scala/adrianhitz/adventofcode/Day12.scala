@@ -7,7 +7,7 @@ object Day12 extends AdventIO {
   }
 
   def part1(implicit s: String): Int = {
-    val moons: Vector[Moon] = parseInput(s)
+    val moons: Vector[Moon] = parseInput(s).map(new Moon(_))
     for (_ <- 1 to 1000) {
       // Apply gravity
       for (moon <- moons) for (other <- moons.filter(_ != moon)) {
@@ -29,7 +29,14 @@ object Day12 extends AdventIO {
     moons.map(m => m.pos.map(Math.abs).sum * m.v.map(Math.abs).sum).sum
   }
 
-  def part2(implicit s: String): Int = ???
+  def part2(implicit s: String): Int = {
+    val moons: Vector[Array[Int]] = parseInput(s)
+    case class Component(pos: Int, v: Int)
+    val a: Seq[Int => Int] = (0 to 3).map(i => moons.map(m => m(i)))
+    val b: Seq[Vector[Int]] = for(i <- 0 to 3) yield moons.map(m => m(i))
+
+    0
+  }
 
   private class Moon(var pos: Array[Int]) {
     var v: Array[Int] = Array[Int](0, 0, 0)
@@ -39,10 +46,9 @@ object Day12 extends AdventIO {
     }
   }
 
-  private def parseInput(s: String): Vector[Moon] = {
+  private def parseInput(s: String): Vector[Array[Int]] = {
     s.split('\n')
       .map(line => line.substring(1, line.length - 1).split(", ").map(x => x.substring(2).toInt))
-      .map(new Moon(_))
       .toVector
   }
 }
