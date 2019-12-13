@@ -8,7 +8,7 @@ object Day12 extends AdventIO {
 
   def part1(implicit s: String): Int = {
     val moons: Vector[Moon] = parseInput(s)
-    for (i <- 1 to 1000) {
+    for (_ <- 1 to 1000) {
       // Apply gravity
       for (moon <- moons) for (other <- moons.filter(_ != moon)) {
         for (d <- 0 until 3) {
