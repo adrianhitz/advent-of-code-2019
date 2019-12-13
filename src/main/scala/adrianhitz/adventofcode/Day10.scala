@@ -20,6 +20,7 @@ object Day10 extends AdventIO {
 
   def part2(implicit s: String): Int = {
     case class Asteroid(position: (Int, Int), relativePosition: (Int, Int), distance: Double, reduced: (Int, Int), angle: Double)
+
     val asteroidPositions: Set[(Int, Int)] = parseInput(s) - stationPosition
     var asteroids = asteroidPositions.map(position => {
       val relative = subtract(position, stationPosition)
@@ -37,12 +38,12 @@ object Day10 extends AdventIO {
           shooting += asteroid.reduced -> asteroid
         }
       }
-      shot = shot.appendedAll(shooting.values.toVector.sortBy(a => a.angle))
+      shot ++= shooting.values.toVector.sortBy(a => a.angle)
       asteroids --= shooting.values
     }
 
-    val a200 = shot(199).position
-    a200._1 * 100 + a200._2
+    val (x, y) = shot(199).position
+    x * 100 + y
   }
 
   var stationPosition: (Int, Int) = (0, 0)
@@ -58,8 +59,8 @@ object Day10 extends AdventIO {
     gcd(b, a % b)
   }
 
-  private def reduce(f: (Int, Int)): (Int, Int) = f match {
-    case (0, 0) => f
+  private def reduce(position: (Int, Int)): (Int, Int) = position match {
+    case (0, 0) => position
     case (a, 0) => (a / Math.abs(a), 0)
     case (0, b) => (0, b / Math.abs(b))
     case (a, b) =>
@@ -70,13 +71,13 @@ object Day10 extends AdventIO {
   private def subtract(fraction1: (Int, Int), fraction2: (Int, Int)): (Int, Int) =
     (fraction1._1 - fraction2._1, fraction1._2 - fraction2._2)
 
-  private def angle(m: (Int, Int)): Double = {
-    var angle = m match {
+  private def angle(position: (Int, Int)): Double = {
+    var angle = position match {
       case (0, y) if y > 0 => Math.PI / (-2)
       case (0, _) => Math.PI / 2
       case (x, y) => Math.atan(y.toDouble / x.toDouble)
     }
-    if(m._1 < 0) angle += Math.PI
+    if(position._1 < 0) angle += Math.PI
     angle
   }
 }
